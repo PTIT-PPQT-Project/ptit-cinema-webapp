@@ -244,9 +244,9 @@ function Footer() {
         <div className="space-y-4">
           <h3 className="text-lg font-bold text-foreground">Movies</h3>
           <ul className="space-y-2 text-sm">
-            <li><Link to="/" className="hover:text-primary">Now Showing</Link></li>
-            <li><Link to="/" className="hover:text-primary">Coming Soon</Link></li>
-            <li><Link to="/" className="hover:text-primary">Top Rated</Link></li>
+            <li><Link to="/" hash="now-showing" className="hover:text-primary">Now Showing</Link></li>
+            <li><Link to="/" hash="now-showing" className="hover:text-primary">Coming Soon</Link></li>
+            <li><Link to="/" hash="now-showing" className="hover:text-primary">Top Rated</Link></li>
           </ul>
         </div>
         <div className="space-y-4">
@@ -256,14 +256,6 @@ function Footer() {
             <li><Link to="/" className="hover:text-primary">Contact Us</Link></li>
             <li><Link to="/" className="hover:text-primary">Terms of Service</Link></li>
             <li><Link to="/" className="hover:text-primary">Privacy Policy</Link></li>
-          </ul>
-        </div>
-        <div className="space-y-4">
-          <h3 className="text-lg font-bold text-foreground">Connect</h3>
-          <ul className="space-y-2 text-sm">
-            <li><a href="#" className="hover:text-primary">Facebook</a></li>
-            <li><a href="#" className="hover:text-primary">Instagram</a></li>
-            <li><a href="#" className="hover:text-primary">Twitter</a></li>
           </ul>
         </div>
       </div>
