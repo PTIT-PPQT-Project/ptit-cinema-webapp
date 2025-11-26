@@ -15,7 +15,8 @@
     "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
     "test:types": "tsc --noEmit",
     "prepare": "husky",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+    "deploy": "wrangler pages deploy"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

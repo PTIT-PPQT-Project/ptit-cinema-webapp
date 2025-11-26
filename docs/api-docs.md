@@ -14,7 +14,7 @@ This document outlines the API endpoints used in the PTIT Cinema Web Application
 *   **Request Body:**
     ```json
     {
-      "email": "user@example.com",
+      "username": "username",
       "password": "password123"
     }
     ```
