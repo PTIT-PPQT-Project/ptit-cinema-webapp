@@ -125,11 +125,13 @@ This document outlines the API endpoints used in the PTIT Cinema Web Application
 
 ## Cinemas & Showtimes
 
-### Get Showtimes by Movie
+### Get All Showtimes
 *   **Endpoint:** `/showtimes`
 *   **Method:** `GET`
-*   **Query Parameters:** `movieId={id}`
-*   **Description:** Retrieves showtimes for a specific movie.
+*   **Query Parameters:** 
+    * `movieId={id}` (optional)
+    * `roomId={id}` (optional)
+*   **Description:** Retrieves a list of showtimes, optionally filtered by movie or room.
 *   **Response (200 OK):**
     ```json
     [
@@ -148,6 +150,28 @@ This document outlines the API endpoints used in the PTIT Cinema Web Application
         "roomId": 1
       }
     ]
+    ```
+
+### Get Showtime Details
+*   **Endpoint:** `/showtimes/{id}`
+*   **Method:** `GET`
+*   **Description:** Retrieves detailed information about a specific showtime.
+*   **Response (200 OK):**
+    ```json
+    {
+      "id": 1,
+      "movieId": 1,
+      "cinemaId": 1,
+      "cinema": {
+        "id": 1,
+        "name": "PTIT Cinema Central",
+        "location": "Hanoi Center"
+      },
+      "date": "2024-11-23",
+      "times": ["10:00", "13:30", "17:00", "20:30"],
+      "price": 120000,
+      "roomId": 1
+    }
     ```
 
 ### Get Seat Map
@@ -192,7 +216,11 @@ This document outlines the API endpoints used in the PTIT Cinema Web Application
       "time": "10:00",
       "seats": ["A1", "A2"],
       "totalPrice": 200000,
-      "status": "confirmed"
+      "paymentInfo": {
+        "method": "credit_card",
+        "cardNumber": "**** **** **** 1234",
+        "cardHolder": "JOHN DOE"
+      }
     }
     ```
 *   **Response (201 Created):**
@@ -236,6 +264,133 @@ This document outlines the API endpoints used in the PTIT Cinema Web Application
         "status": "confirmed",
         "createdAt": "2024-11-23T10:00:00Z",
         "qrCode": "PTIT_CINEMA_BK1716..."
+      }
+    ]
+    ```
+
+## Manager / Admin
+
+### Create Movie
+*   **Endpoint:** `/movies`
+*   **Method:** `POST`
+*   **Description:** Creates a new movie.
+*   **Headers:** `Authorization: Bearer <accessToken>` (Role: MANAGER/ADMIN)
+*   **Request Body:**
+    ```json
+    {
+      "title": "New Movie",
+      "genre": "Action",
+      "rating": 0,
+      "poster": "https://example.com/poster.jpg",
+      "backdrop": "https://example.com/backdrop.jpg",
+      "duration": "2h",
+      "releaseDate": "2024-01-01",
+      "synopsis": "Movie description",
+      "director": "Director Name",
+      "cast": ["Actor 1", "Actor 2"],
+      "trailerUrl": "https://youtube.com/..."
+    }
+    ```
+*   **Response (201 Created):**
+    ```json
+    {
+      "id": 101,
+      "title": "New Movie",
+      // ... other fields
+    }
+    ```
+
+### Update Movie
+*   **Endpoint:** `/movies/{id}`
+*   **Method:** `PUT`
+*   **Description:** Updates an existing movie.
+*   **Headers:** `Authorization: Bearer <accessToken>` (Role: MANAGER/ADMIN)
+*   **Request Body:**
+    ```json
+    {
+      "title": "Updated Title",
+      // ... fields to update
+    }
+    ```
+*   **Response (200 OK):**
+    ```json
+    {
+      "id": 101,
+      "title": "Updated Title",
+      // ...
+    }
+    ```
+
+### Delete Movie
+*   **Endpoint:** `/movies/{id}`
+*   **Method:** `DELETE`
+*   **Description:** Deletes a movie.
+*   **Headers:** `Authorization: Bearer <accessToken>` (Role: MANAGER/ADMIN)
+*   **Response (204 No Content)**
+
+### Create Showtime
+*   **Endpoint:** `/showtimes`
+*   **Method:** `POST`
+*   **Description:** Creates a new showtime.
+*   **Headers:** `Authorization: Bearer <accessToken>` (Role: MANAGER/ADMIN)
+*   **Request Body:**
+    ```json
+    {
+      "movieId": 1,
+      "cinemaId": 1,
+      "date": "2024-11-25",
+      "times": ["09:00", "14:00"],
+      "price": 100000,
+      "roomId": 1
+    }
+    ```
+*   **Response (201 Created):**
+    ```json
+    {
+      "id": 501,
+      "movieId": 1,
+      // ...
+    }
+    ```
+
+### Update Showtime
+*   **Endpoint:** `/showtimes/{id}`
+*   **Method:** `PUT`
+*   **Description:** Updates an existing showtime.
+*   **Headers:** `Authorization: Bearer <accessToken>` (Role: MANAGER/ADMIN)
+*   **Request Body:**
+    ```json
+    {
+      "date": "2024-11-26",
+      "times": ["10:00"]
+    }
+    ```
+*   **Response (200 OK):**
+    ```json
+    {
+      "id": 501,
+      // ...
+    }
+    ```
+
+### Delete Showtime
+*   **Endpoint:** `/showtimes/{id}`
+*   **Method:** `DELETE`
+*   **Description:** Deletes a showtime.
+*   **Headers:** `Authorization: Bearer <accessToken>` (Role: MANAGER/ADMIN)
+*   **Response (204 No Content)**
+
+### Get All Rooms
+*   **Endpoint:** `/rooms`
+*   **Method:** `GET`
+*   **Description:** Retrieves a list of all cinema rooms.
+*   **Response (200 OK):**
+    ```json
+    [
+      {
+        "id": 1,
+        "name": "Room 1",
+        "cinemaId": 1
       }
     ]
     ```

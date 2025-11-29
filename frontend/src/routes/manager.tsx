@@ -65,7 +65,7 @@ function ManagerPage() {
   const navigate = useNavigate()
 
   const [movies, setMovies] = React.useState<Movie[]>([])
-  const [movie, setMovie] = React.useState<Movie>({})
+  const [movie, setMovie] = React.useState<Movie>({} as Movie)
   const [showtimes, setShowtimes] = React.useState<Showtime[]>([])
   const [showDetails, setShowDetail] = React.useState<boolean>(false)
   const [page, setPage] = React.useState<number>(1);
@@ -422,6 +422,15 @@ function ManagerPage() {
                   handleChangeMovie(movie.id, "poster", imageUrl);
                 }}
               />
+            {/* Poster URL Input */}
+             <div className="flex flex-col gap-1">
+                <span className="text-xs font-semibold text-muted-foreground">Poster URL</span>
+                <Input
+                  value={movie.poster || ''}
+                  onChange={(e) => handleChangeMovie(movie.id, 'poster', e.target.value)}
+                  placeholder="https://..."
+                />
+              </div>
             </div>
 
             {/* RIGHT COLUMN — MOVIE FIELDS */}
@@ -535,6 +544,16 @@ function ManagerPage() {
                 >
                   Upload Backdrop
                 </button>
+
+               {/* Backdrop URL Input */}
+              <div className="flex flex-col gap-1 mt-2">
+                <span className="text-xs font-semibold text-muted-foreground">Backdrop URL</span>
+                <Input
+                  value={movie.backdrop || ''}
+                  onChange={(e) => handleChangeMovie(movie.id, 'backdrop', e.target.value)}
+                  placeholder="https://..."
+                />
+              </div>
 
               </div>
             </div>
@@ -713,7 +732,7 @@ function ManagerPage() {
               <div className="flex items-center justify-between">
                 <h3 className="font-semibold text-base">Room #{room.roomId}</h3>
                 <Button
-                  size="xs"
+                  size="sm"
                   variant="outline"
                   onClick={() => handleAddShowtime(room.roomId)}
                 >
@@ -838,7 +857,7 @@ function ManagerPage() {
                     </div>
                     <Button
                       variant="destructive"
-                      size="xs"
+                      size="sm"
                       className="mt-1"
                       onClick={() => handleDeleteShowtime(st.id)}
                     >
