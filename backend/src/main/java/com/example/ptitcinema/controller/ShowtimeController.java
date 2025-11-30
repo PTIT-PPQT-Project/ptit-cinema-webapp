@@ -1,16 +1,19 @@
 package com.example.ptitcinema.controller;
 
+import com.example.ptitcinema.model.dto.ShowtimeDetailDto;
 import com.example.ptitcinema.model.dto.ShowtimeDto;
 import com.example.ptitcinema.service.IShowtimeService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/showtimes")
@@ -36,5 +39,16 @@ public class ShowtimeController {
         List<ShowtimeDto> showtimes = showtimeService.getShowtimesByMovie(movieId);
         
         return ResponseEntity.ok(showtimes);
+    }
+
+    @Operation(summary = "Get Showtime Details", description = "Retrieves detailed information about a specific showtime by its ID.")
+    @GetMapping("/{id}")
+    public ResponseEntity<ShowtimeDetailDto> getShowtimeDetail(@PathVariable("id") int showtimeId) {
+        
+        Optional<ShowtimeDetailDto> detail = showtimeService.getShowtimeDetail(showtimeId);
+        
+        // Trả về 200 OK nếu tìm thấy, ngược lại là 404 Not Found
+        return detail.map(ResponseEntity::ok)
+                     .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

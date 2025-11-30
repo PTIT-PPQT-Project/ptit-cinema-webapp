@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ShowtimeRepository implements IShowtimeRepository {
@@ -54,6 +55,17 @@ public class ShowtimeRepository implements IShowtimeRepository {
             return sqlJdbcTemplate.queryForObject(sqlQuery, cinemaRowMapper, roomId);
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    @Override
+    public Optional<Showtime> findShowtimeById(int showtimeId) {
+        String sqlQuery = "SELECT * FROM Showtime WHERE Id = ?";
+        try {
+            Showtime showtime = sqlJdbcTemplate.queryForObject(sqlQuery, showtimeRowMapper, showtimeId);
+            return Optional.ofNullable(showtime);
+        } catch (Exception e) {
+            return Optional.empty();
         }
     }
 }

@@ -12,7 +12,7 @@ public class UserDto {
     private List<String> roles;
     
     public UserDto(User user) {
-        this.Id = user.getId();
+        this.id = user.getId();
         this.userName = user.getUserName();
         this.email = user.getEmail();
         this.fullName = user.getFullName();

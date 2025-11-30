@@ -1,8 +1,10 @@
 package com.example.ptitcinema.service;
 
+import com.example.ptitcinema.model.dto.ShowtimeDetailDto;
 import com.example.ptitcinema.model.dto.ShowtimeDto;
 import java.util.List;
-
+import java.util.Optional;
 public interface IShowtimeService {
     List<ShowtimeDto> getShowtimesByMovie(int movieId);
+    Optional<ShowtimeDetailDto> getShowtimeDetail(int showtimeId);
 }

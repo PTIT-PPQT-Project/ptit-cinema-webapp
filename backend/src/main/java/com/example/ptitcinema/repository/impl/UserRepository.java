@@ -34,7 +34,7 @@ public class UserRepository  implements IUserRepository {
                 return user;
             }, email);
         }
-        catch (Exeption e){
+        catch (Exception e){
             return null;
         }
         
@@ -47,7 +47,7 @@ public class UserRepository  implements IUserRepository {
             return sqlJdbcTemplate.queryForObject(sqlQuery, (re, rowNum) -> {
                 User user = new User();
                 user.setId(re.getInt("id"));
-                user.setUsername(re.getString("username"));
+                user.setUserName(re.getString("username"));
                 user.setEmail(re.getString("email"));
                 user.setPassword(re.getString("password"));
                 user.setFullName(re.getString("full_name"));
@@ -62,7 +62,7 @@ public class UserRepository  implements IUserRepository {
     @Override
     public User saveRegister(User user){
         String sql = "INSERT INTO [User] (Username, Email, Password, FullName, Phone) VALUES (?, ?, ?, ?, ?)";
-        sqlJdbcTemplate.update(sql, user.getUsername(), user.getEmail(), user.getPassword(), user.getFullName(), user.getPhone());
+        sqlJdbcTemplate.update(sql, user.getUserName(), user.getEmail(), user.getPassword(), user.getFullName(), user.getPhone());
         User userSaved = findByEmail(user.getEmail());
         int userId = userSaved.getId();
         

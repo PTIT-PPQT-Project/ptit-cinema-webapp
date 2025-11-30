@@ -3,6 +3,7 @@ package com.example.ptitcinema.service.impl;
 import com.example.ptitcinema.model.Showtime;
 import com.example.ptitcinema.model.Cinema;
 import com.example.ptitcinema.model.dto.CinemaDto;
+import com.example.ptitcinema.model.dto.ShowtimeDetailDto;
 import com.example.ptitcinema.model.dto.ShowtimeDto;
 import com.example.ptitcinema.repository.IShowtimeRepository;
 import com.example.ptitcinema.service.IShowtimeService;
@@ -70,5 +71,25 @@ public class ShowtimeService implements IShowtimeService {
         }
 
         return result;
+    }
+    
+    @Override
+    public Optional<ShowtimeDetailDto> getShowtimeDetail(int showtimeId) {
+        // 1. Lấy thông tin Showtime
+        Optional<Showtime> showtimeOptional = showtimeRepository.findShowtimeById(showtimeId);
+        
+        if (showtimeOptional.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Showtime showtime = showtimeOptional.get();
+        
+        // 2. Lấy thông tin Cinema (Rạp chiếu) dựa trên RoomId
+        Cinema cinema = showtimeRepository.findCinemaByRoomId(showtime.getRoomId());
+        
+        // 3. Chuyển đổi sang DTO chi tiết
+        ShowtimeDetailDto dto = new ShowtimeDetailDto(showtime, cinema);
+        
+        return Optional.of(dto);
     }
 }

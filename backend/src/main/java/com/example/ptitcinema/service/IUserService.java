@@ -3,6 +3,7 @@ package com.example.ptitcinema.service;
 import com.example.ptitcinema.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IUserService {
     Optional<UserDto> getProfileByEmail(String email);
