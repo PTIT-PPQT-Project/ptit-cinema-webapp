@@ -143,6 +143,70 @@ public class MovieService implements IMovieService {
         }
     }
 
+    @Transactional // Đảm bảo tất cả các thao tác DB thành công hoặc thất bại
+    @Override
+    public Optional<MovieDetailDto> createMovie(MovieRequest request) {
+        
+        // 1. Ánh xạ từ Request DTO sang Movie Entity
+        Movie movie = new Movie();
+        movie.setTitle(request.getTitle());
+        movie.setRating(request.getRating());
+        movie.setPoster(request.getPoster());
+        movie.setBackdrop(request.getBackdrop());
+        movie.setSynopsis(request.getSynopsis());
+        movie.setDirector(request.getDirector());
+        movie.setTrailerUrl(request.getTrailerUrl());
+
+        // Xử lý chuyển đổi định dạng
+        movie.setDuration(parseDuration(request.getDuration()));
+        try {
+            movie.setReleaseDate(LocalDate.parse(request.getReleaseDate()));
+        } catch (DateTimeParseException e) {
+            movie.setReleaseDate(LocalDate.now()); // Fallback
+        }
+
+        // 2. Lưu Movie chính và lấy ID
+        Movie savedMovie = movieRepository.saveMovie(movie);
+        int movieId = savedMovie.getId();
+        
+        if (movieId <= 0) return Optional.empty();
+
+        // 3. Xử lý Genre (Thể loại)
+        if (request.getGenre() != null && !request.getGenre().trim().isEmpty()) {
+            String[] genres = request.getGenre().split(",");
+            for (String genreName : genres) {
+                String name = genreName.trim();
+                if (name.isEmpty()) continue;
+                
+                int genreId = movieRepository.findGenreIdByName(name)
+                    .orElseGet(() -> movieRepository.saveGenre(name));
+                
+                if (genreId > 0) {
+                    movieRepository.saveMovieGenre(movieId, genreId);
+                }
+            }
+        }
+
+        // 4. Xử lý Cast (Diễn viên)
+        if (request.getCast() != null) {
+            for (String castName : request.getCast()) {
+                String name = castName.trim();
+                if (name.isEmpty()) continue;
+
+                int castingId = movieRepository.findCastingIdByName(name)
+                    .orElseGet(() -> movieRepository.saveCasting(name));
+
+                if (castingId > 0) {
+                    movieRepository.saveMovieCasting(movieId, castingId);
+                }
+            }
+        }
+
+        // 5. Tạo Response DTO (Cần lấy lại thông tin đã lưu, đặc biệt là Cast và Genre)
+        // Dùng phương thức đã có: getMovieDetail
+        return getMovieDetail(movieId); 
+    }
+
     @Transactional
     @Override
     public Optional<MovieDetailDto> updateMovie(int id, MovieRequest request) {
