@@ -64,4 +64,20 @@ public class MovieController {
         return updatedMovie.map(ResponseEntity::ok)
                            .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @Operation(summary = "Delete Movie (MANAGER/ADMIN)", description = "Deletes a movie by ID, along with all associated showtimes, genres, and cast links.")
+    @DeleteMapping("/{id}")
+    // Cần cấu hình Spring Security để kiểm tra Role MANAGER/ADMIN
+    public ResponseEntity<Void> deleteMovie(@PathVariable int id) {
+        
+        boolean deleted = movieService.deleteMovie(id);
+        
+        if (deleted) {
+            // 204 No Content: Xóa thành công
+            return ResponseEntity.noContent().build();
+        } else {
+            // 404 Not Found: Không tìm thấy hoặc xóa thất bại
+            return ResponseEntity.notFound().build(); 
+        }
+    }
 }

@@ -2,8 +2,6 @@ package com.example.ptitcinema.model.dto;
 
 import java.util.List;
 import java.math.BigDecimal;
-import java.time.LocalTime;
-import java.time.LocalDate;
 
 public class MovieRequest {
     private String title;

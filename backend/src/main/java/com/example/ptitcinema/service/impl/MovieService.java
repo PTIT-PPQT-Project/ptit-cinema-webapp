@@ -181,4 +181,28 @@ public class MovieService implements IMovieService {
         // 5. Trả về thông tin chi tiết phim đã cập nhật
         return getMovieDetail(id); 
     }
+
+    @Transactional
+    @Override
+    public boolean deleteMovie(int id) {
+        // 1. Kiểm tra tồn tại
+        if (movieRepository.findById(id).isEmpty()) {
+            return false; // Không tìm thấy
+        }
+
+        // 2. Xóa các bản ghi phụ thuộc theo thứ tự:
+
+        // Xóa liên kết (MovieGenre, MovieCasting)
+        movieRepository.deleteMovieGenres(id);
+        movieRepository.deleteMovieCastings(id);
+        
+        // Xóa các Showtime liên quan (sẽ thất bại nếu có Booking)
+        movieRepository.deleteShowtimesByMovieId(id); 
+
+        // 3. Xóa Movie chính
+        movieRepository.deleteMovieById(id);
+        
+        // Kiểm tra lại sau khi xóa (có thể bỏ qua bước này nếu tin tưởng vào transaction)
+        return movieRepository.findById(id).isEmpty();
+    }
 }

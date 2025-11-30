@@ -6,8 +6,12 @@ import com.example.ptitcinema.repository.IShowtimeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.Time;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,5 +71,49 @@ public class ShowtimeRepository implements IShowtimeRepository {
         } catch (Exception e) {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public boolean checkRoomExists(int roomId) {
+        String sql = "SELECT COUNT(*) FROM CinemaRoom WHERE Id = ?";
+        // Lấy kết quả dưới dạng Integer (Count)
+        Integer count = sqlJdbcTemplate.queryForObject(sql, Integer.class, roomId);
+        return count != null && count > 0;
+    }
+
+    @Override
+    public int saveShowtime(int movieId, int roomId, java.time.LocalDate date, java.time.LocalTime time, java.math.BigDecimal price) {
+        String sql = "INSERT INTO Showtime (MovieId, RoomId, Date, Time, Price) VALUES (?, ?, ?, ?, ?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        sqlJdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, movieId);
+            ps.setInt(2, roomId);
+            ps.setDate(3, Date.valueOf(date));
+            ps.setTime(4, Time.valueOf(time));
+            ps.setBigDecimal(5, price);
+            return ps;
+        }, keyHolder);
+
+        return keyHolder.getKey() != null ? keyHolder.getKey().intValue() : -1;
+    }
+
+    @Override
+    public void deleteBookingDetailsByShowtimeId(int showtimeId) {
+        String sql = "DELETE FROM BookingDetails WHERE BookingId IN (SELECT Id FROM Booking WHERE ShowtimeId = ?)";
+        sqlJdbcTemplate.update(sql, showtimeId);
+    }
+
+    @Override
+    public void deleteBookingsByShowtimeId(int showtimeId) {
+        String sql = "DELETE FROM Booking WHERE ShowtimeId = ?";
+        sqlJdbcTemplate.update(sql, showtimeId);
+    }
+    
+    @Override
+    public void deleteShowtimeById(int showtimeId) {
+        String sql = "DELETE FROM Showtime WHERE Id = ?";
+        sqlJdbcTemplate.update(sql, showtimeId);
     }
 }

@@ -204,4 +204,16 @@ public class MovieRepository implements IMovieRepository {
         String sql = "DELETE FROM MovieCasting WHERE MovieId = ?";
         sqlJdbcTemplate.update(sql, movieId);
     }
+
+    @Override
+    public void deleteShowtimesByMovieId(int movieId) {
+        String sql = "DELETE FROM Showtime WHERE MovieId = ?";
+        sqlJdbcTemplate.update(sql, movieId);
+    }
+    
+    @Override
+    public void deleteMovieById(int movieId) {
+        String sql = "DELETE FROM Movie WHERE Id = ?";
+        sqlJdbcTemplate.update(sql, movieId);
+    }
 }

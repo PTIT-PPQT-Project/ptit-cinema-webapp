@@ -11,4 +11,11 @@ public interface IShowtimeRepository {
     List<Showtime> findShowtimesByMovieId(int movieId);
 
     Cinema findCinemaByRoomId(int roomId);
+
+    int saveShowtime(int movieId, int roomId, java.time.LocalDate date, java.time.LocalTime time, java.math.BigDecimal price); 
+    boolean checkRoomExists(int roomId);
+
+    void deleteBookingDetailsByShowtimeId(int showtimeId);
+    void deleteBookingsByShowtimeId(int showtimeId);
+    void deleteShowtimeById(int showtimeId);
 }

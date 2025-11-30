@@ -5,23 +5,31 @@ import com.example.ptitcinema.model.Cinema;
 import com.example.ptitcinema.model.dto.CinemaDto;
 import com.example.ptitcinema.model.dto.ShowtimeDetailDto;
 import com.example.ptitcinema.model.dto.ShowtimeDto;
+import com.example.ptitcinema.model.dto.ShowtimeRequest;
+import com.example.ptitcinema.repository.IMovieRepository;
 import com.example.ptitcinema.repository.IShowtimeRepository;
 import com.example.ptitcinema.service.IShowtimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 @Service
 public class ShowtimeService implements IShowtimeService {
+    private final IMovieRepository movieRepository;
     private final IShowtimeRepository showtimeRepository;
     private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
     @Autowired
-    public ShowtimeService(IShowtimeRepository showtimeRepository) {
+    public ShowtimeService(IShowtimeRepository showtimeRepository, IMovieRepository movieRepository) {
         this.showtimeRepository = showtimeRepository;
+        this.movieRepository = movieRepository;
     }
 
     @Override
@@ -72,7 +80,7 @@ public class ShowtimeService implements IShowtimeService {
 
         return result;
     }
-    
+
     @Override
     public Optional<ShowtimeDetailDto> getShowtimeDetail(int showtimeId) {
         // 1. Lấy thông tin Showtime
@@ -91,5 +99,73 @@ public class ShowtimeService implements IShowtimeService {
         ShowtimeDetailDto dto = new ShowtimeDetailDto(showtime, cinema);
         
         return Optional.of(dto);
+    }
+
+    @Transactional
+    @Override
+    public List<Integer> createShowtimes(ShowtimeRequest request) {
+        
+        // 1. Validation cơ bản: Kiểm tra tồn tại Movie và Room
+        if (movieRepository.findById(request.getMovieId()).isEmpty()) {
+            return List.of(); // Movie không tồn tại
+        }
+        if (!showtimeRepository.checkRoomExists(request.getRoomId())) {
+            return List.of(); // Room không tồn tại
+        }
+
+        LocalDate date;
+        try {
+            date = LocalDate.parse(request.getDate());
+        } catch (DateTimeParseException e) {
+            return List.of(); // Định dạng ngày không hợp lệ
+        }
+
+        List<Integer> createdIds = new ArrayList<>();
+        
+        // 2. Lặp qua danh sách giờ chiếu và lưu từng suất chiếu
+        for (String timeStr : request.getTimes()) {
+            try {
+                LocalTime time = LocalTime.parse(timeStr, timeFormatter);
+                
+                int newId = showtimeRepository.saveShowtime(
+                    request.getMovieId(),
+                    request.getRoomId(),
+                    date,
+                    time,
+                    request.getPrice()
+                );
+
+                if (newId > 0) {
+                    createdIds.add(newId);
+                }
+            } catch (DateTimeParseException e) {
+                // Bỏ qua giờ chiếu không hợp lệ và tiếp tục
+            }
+        }
+        
+        // Trả về danh sách ID của các suất chiếu đã tạo
+        return createdIds; 
+    }
+
+    @Transactional
+    @Override
+    public boolean deleteShowtime(int id) {
+        // 1. Kiểm tra tồn tại
+        if (showtimeRepository.findShowtimeById(id).isEmpty()) {
+            return false; // Không tìm thấy
+        }
+
+        // 2. Xóa các bản ghi phụ thuộc theo thứ tự:
+        // a. Xóa BookingDetails
+        showtimeRepository.deleteBookingDetailsByShowtimeId(id);
+        
+        // b. Xóa Booking
+        showtimeRepository.deleteBookingsByShowtimeId(id);
+
+        // c. Xóa Showtime chính
+        showtimeRepository.deleteShowtimeById(id);
+        
+        // Kiểm tra lại sau khi xóa
+        return showtimeRepository.findShowtimeById(id).isEmpty();
     }
 }

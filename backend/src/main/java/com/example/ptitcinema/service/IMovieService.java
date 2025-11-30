@@ -13,4 +13,5 @@ public interface IMovieService {
 
     Optional<MovieDetailDto> createMovie(MovieRequest request);
     Optional<MovieDetailDto> updateMovie(int id, MovieRequest request);
+    boolean deleteMovie(int id);
 }

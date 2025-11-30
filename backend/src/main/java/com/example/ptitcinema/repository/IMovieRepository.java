@@ -22,4 +22,7 @@ public interface IMovieRepository {
     void updateMovie(Movie movie);
     void deleteMovieGenres(int movieId);
     void deleteMovieCastings(int movieId);
+
+    void deleteMovieById(int movieId);
+    void deleteShowtimesByMovieId(int movieId);
 }
