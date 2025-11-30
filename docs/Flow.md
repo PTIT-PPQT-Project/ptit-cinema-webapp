@@ -1,7 +1,7 @@
 # PROJECT SPECIFICATION: SINGLE CINEMA MANAGEMENT SYSTEM
 
 **Phiên bản:** 1.1 (Single Cinema - Pay at Counter)
-**Mục tiêu:** Xây dựng hệ thống đặt vé xem phim online cho một rạp duy nhất.
+**Mục tiêu:** Xây dựng hệ thống đặt vé xem phim online cho nhiều rạp chiếu phim.
 **Trạng thái:** MVP (Minimum Viable Product).
 
 ---
