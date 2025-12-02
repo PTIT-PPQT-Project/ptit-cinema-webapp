@@ -29,7 +29,7 @@ public class AuthController {
     private JwtUtil jwtUtil;
 
     @Operation(summary = "Login user", description = "Authenticates a user and returns access tokens")
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest req) {
         
         User user = userService.login(req.getUsername(), req.getPassword()); 
