@@ -1,0 +1,226 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------------< com.example:PTITCinema >-----------------------
+[INFO] Building PTITCinema 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.5.0:clean (default-clean) @ PTITCinema ---
+[INFO] Deleting D:\Ptit\ptit-cinema-webapp\backend\target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ PTITCinema ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ PTITCinema ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 54 source files with javac [debug parameters release 17] to target\classes
+[INFO] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/AuthController.java: D:\Ptit\ptit-cinema-webapp\backend\src\main\java\com\example\ptitcinema\controller\AuthController.java uses unchecked or unsafe operations.
+[INFO] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/AuthController.java: Recompile with -Xlint:unchecked for details.
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtAuthenticationEntryPoint.java:[5,40] package org.springframework.security.web does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtAuthenticationEntryPoint.java:[11,53] cannot find symbol
+  symbol: class AuthenticationEntryPoint
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtAuthenticationEntryPoint.java:[16,59] package org.springframework.security.core does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtAuthenticationFilter.java:[9,51] package org.springframework.security.authentication does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtAuthenticationFilter.java:[10,49] package org.springframework.security.core.context does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtAuthenticationFilter.java:[11,55] package org.springframework.security.web.authentication does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtUtil.java:[4,32] package io.jsonwebtoken.security does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtUtil.java:[43,13] cannot find symbol
+  symbol:   class Claims
+  location: class com.example.config.JwtUtil
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtUtil.java:[3,1] package io.jsonwebtoken does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/SecurityConfig.java:[6,67] package org.springframework.security.config.annotation.web.builders does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/SecurityConfig.java:[7,48] package org.springframework.security.config.http does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/SecurityConfig.java:[8,40] package org.springframework.security.web does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/SecurityConfig.java:[9,55] package org.springframework.security.web.authentication does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/SecurityConfig.java:[21,44] cannot find symbol
+  symbol:   class HttpSecurity
+  location: class com.example.config.SecurityConfig
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/SecurityConfig.java:[21,12] cannot find symbol
+  symbol:   class SecurityFilterChain
+  location: class com.example.config.SecurityConfig
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtUtil.java:[11,8] duplicate class: com.example.config.JwtUtil
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/AuthController.java:[15,37] cannot access com.example.ptitcinema.config.JwtUtil
+  bad source file: D:\Ptit\ptit-cinema-webapp\backend\src\main\java\com\example\ptitcinema\config\JwtUtil.java
+    file does not contain class com.example.ptitcinema.config.JwtUtil
+    Please remove or make sure it appears in the correct subdirectory of the sourcepath.
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/AuthController.java:[28,13] cannot find symbol
+  symbol:   class JwtUtil
+  location: class com.example.ptitcinema.controller.AuthController
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/BookingController.java:[10,41] package org.springframework.security.core does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/BookingController.java:[11,49] package org.springframework.security.core.context does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/BookingController.java:[12,53] package org.springframework.security.core.userdetails does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/UserController.java:[8,41] package org.springframework.security.core does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/UserController.java:[9,49] package org.springframework.security.core.context does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/UserController.java:[10,53] package org.springframework.security.core.userdetails does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtAuthenticationEntryPoint.java:[13,5] method does not override or implement a method from a supertype
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtAuthenticationFilter.java:[42,13] cannot find symbol
+  symbol:   class UsernamePasswordAuthenticationToken
+  location: class com.example.config.JwtAuthenticationFilter
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtAuthenticationFilter.java:[43,25] cannot find symbol
+  symbol:   class UsernamePasswordAuthenticationToken
+  location: class com.example.config.JwtAuthenticationFilter
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtAuthenticationFilter.java:[45,38] cannot find symbol
+  symbol:   class WebAuthenticationDetailsSource
+  location: class com.example.config.JwtAuthenticationFilter
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtAuthenticationFilter.java:[47,13] cannot find symbol
+  symbol:   variable SecurityContextHolder
+  location: class com.example.config.JwtAuthenticationFilter
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtUtil.java:[18,16] cannot find symbol
+  symbol:   variable Keys
+  location: class com.example.config.JwtUtil
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtUtil.java:[26,44] cannot find symbol
+  symbol:   variable SignatureAlgorithm
+  location: class com.example.config.JwtUtil
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtUtil.java:[22,16] cannot find symbol
+  symbol:   variable Jwts
+  location: class com.example.config.JwtUtil
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtUtil.java:[44,16] cannot find symbol
+  symbol:   variable Jwts
+  location: class com.example.config.JwtUtil
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/SecurityConfig.java:[32,65] cannot find symbol
+  symbol:   variable SessionCreationPolicy
+  location: class com.example.config.SecurityConfig
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/SecurityConfig.java:[34,41] cannot find symbol
+  symbol:   class UsernamePasswordAuthenticationFilter
+  location: class com.example.config.SecurityConfig
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/AuthController.java:[59,23] cannot find symbol
+  symbol:   variable Arrays
+  location: class com.example.ptitcinema.controller.AuthController
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/BookingController.java:[34,9] cannot find symbol
+  symbol:   class Authentication
+  location: class com.example.ptitcinema.controller.BookingController
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/BookingController.java:[34,41] cannot find symbol
+  symbol:   variable SecurityContextHolder
+  location: class com.example.ptitcinema.controller.BookingController
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/BookingController.java:[37,80] cannot find symbol
+  symbol:   class UserDetails
+  location: class com.example.ptitcinema.controller.BookingController
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/BookingController.java:[38,27] cannot find symbol
+  symbol:   class UserDetails
+  location: class com.example.ptitcinema.controller.BookingController
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/UserController.java:[32,9] cannot find symbol
+  symbol:   class Authentication
+  location: class com.example.ptitcinema.controller.UserController
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/UserController.java:[32,41] cannot find symbol
+  symbol:   variable SecurityContextHolder
+  location: class com.example.ptitcinema.controller.UserController
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/UserController.java:[35,80] cannot find symbol
+  symbol:   class UserDetails
+  location: class com.example.ptitcinema.controller.UserController
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/UserController.java:[36,32] cannot find symbol
+  symbol:   class UserDetails
+  location: class com.example.ptitcinema.controller.UserController
+[INFO] 44 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  3.761 s
+[INFO] Finished at: 2025-12-03T00:31:50+07:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.14.1:compile (default-compile) on project PTITCinema: Compilation failure: Compilation failure: 
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtAuthenticationEntryPoint.java:[5,40] package org.springframework.security.web does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtAuthenticationEntryPoint.java:[11,53] cannot find symbol
+[ERROR]   symbol: class AuthenticationEntryPoint
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtAuthenticationEntryPoint.java:[16,59] package org.springframework.security.core does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtAuthenticationFilter.java:[9,51] package org.springframework.security.authentication does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtAuthenticationFilter.java:[10,49] package org.springframework.security.core.context does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtAuthenticationFilter.java:[11,55] package org.springframework.security.web.authentication does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtUtil.java:[4,32] package io.jsonwebtoken.security does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtUtil.java:[43,13] cannot find symbol
+[ERROR]   symbol:   class Claims
+[ERROR]   location: class com.example.config.JwtUtil
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtUtil.java:[3,1] package io.jsonwebtoken does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/SecurityConfig.java:[6,67] package org.springframework.security.config.annotation.web.builders does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/SecurityConfig.java:[7,48] package org.springframework.security.config.http does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/SecurityConfig.java:[8,40] package org.springframework.security.web does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/SecurityConfig.java:[9,55] package org.springframework.security.web.authentication does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/SecurityConfig.java:[21,44] cannot find symbol
+[ERROR]   symbol:   class HttpSecurity
+[ERROR]   location: class com.example.config.SecurityConfig
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/SecurityConfig.java:[21,12] cannot find symbol
+[ERROR]   symbol:   class SecurityFilterChain
+[ERROR]   location: class com.example.config.SecurityConfig
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtUtil.java:[11,8] duplicate class: com.example.config.JwtUtil
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/AuthController.java:[15,37] cannot access com.example.ptitcinema.config.JwtUtil
+[ERROR]   bad source file: D:\Ptit\ptit-cinema-webapp\backend\src\main\java\com\example\ptitcinema\config\JwtUtil.java
+[ERROR]     file does not contain class com.example.ptitcinema.config.JwtUtil
+[ERROR]     Please remove or make sure it appears in the correct subdirectory of the sourcepath.
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/AuthController.java:[28,13] cannot find symbol
+[ERROR]   symbol:   class JwtUtil
+[ERROR]   location: class com.example.ptitcinema.controller.AuthController
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/BookingController.java:[10,41] package org.springframework.security.core does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/BookingController.java:[11,49] package org.springframework.security.core.context does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/BookingController.java:[12,53] package org.springframework.security.core.userdetails does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/UserController.java:[8,41] package org.springframework.security.core does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/UserController.java:[9,49] package org.springframework.security.core.context does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/UserController.java:[10,53] package org.springframework.security.core.userdetails does not exist
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtAuthenticationEntryPoint.java:[13,5] method does not override or implement a method from a supertype
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtAuthenticationFilter.java:[42,13] cannot find symbol
+[ERROR]   symbol:   class UsernamePasswordAuthenticationToken
+[ERROR]   location: class com.example.config.JwtAuthenticationFilter
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtAuthenticationFilter.java:[43,25] cannot find symbol
+[ERROR]   symbol:   class UsernamePasswordAuthenticationToken
+[ERROR]   location: class com.example.config.JwtAuthenticationFilter
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtAuthenticationFilter.java:[45,38] cannot find symbol
+[ERROR]   symbol:   class WebAuthenticationDetailsSource
+[ERROR]   location: class com.example.config.JwtAuthenticationFilter
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtAuthenticationFilter.java:[47,13] cannot find symbol
+[ERROR]   symbol:   variable SecurityContextHolder
+[ERROR]   location: class com.example.config.JwtAuthenticationFilter
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtUtil.java:[18,16] cannot find symbol
+[ERROR]   symbol:   variable Keys
+[ERROR]   location: class com.example.config.JwtUtil
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtUtil.java:[26,44] cannot find symbol
+[ERROR]   symbol:   variable SignatureAlgorithm
+[ERROR]   location: class com.example.config.JwtUtil
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtUtil.java:[22,16] cannot find symbol
+[ERROR]   symbol:   variable Jwts
+[ERROR]   location: class com.example.config.JwtUtil
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtUtil.java:[44,16] cannot find symbol
+[ERROR]   symbol:   variable Jwts
+[ERROR]   location: class com.example.config.JwtUtil
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/SecurityConfig.java:[32,65] cannot find symbol
+[ERROR]   symbol:   variable SessionCreationPolicy
+[ERROR]   location: class com.example.config.SecurityConfig
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/SecurityConfig.java:[34,41] cannot find symbol
+[ERROR]   symbol:   class UsernamePasswordAuthenticationFilter
+[ERROR]   location: class com.example.config.SecurityConfig
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/AuthController.java:[59,23] cannot find symbol
+[ERROR]   symbol:   variable Arrays
+[ERROR]   location: class com.example.ptitcinema.controller.AuthController
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/BookingController.java:[34,9] cannot find symbol
+[ERROR]   symbol:   class Authentication
+[ERROR]   location: class com.example.ptitcinema.controller.BookingController
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/BookingController.java:[34,41] cannot find symbol
+[ERROR]   symbol:   variable SecurityContextHolder
+[ERROR]   location: class com.example.ptitcinema.controller.BookingController
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/BookingController.java:[37,80] cannot find symbol
+[ERROR]   symbol:   class UserDetails
+[ERROR]   location: class com.example.ptitcinema.controller.BookingController
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/BookingController.java:[38,27] cannot find symbol
+[ERROR]   symbol:   class UserDetails
+[ERROR]   location: class com.example.ptitcinema.controller.BookingController
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/UserController.java:[32,9] cannot find symbol
+[ERROR]   symbol:   class Authentication
+[ERROR]   location: class com.example.ptitcinema.controller.UserController
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/UserController.java:[32,41] cannot find symbol
+[ERROR]   symbol:   variable SecurityContextHolder
+[ERROR]   location: class com.example.ptitcinema.controller.UserController
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/UserController.java:[35,80] cannot find symbol
+[ERROR]   symbol:   class UserDetails
+[ERROR]   location: class com.example.ptitcinema.controller.UserController
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/UserController.java:[36,32] cannot find symbol
+[ERROR]   symbol:   class UserDetails
+[ERROR]   location: class com.example.ptitcinema.controller.UserController
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

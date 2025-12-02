@@ -1,0 +1,45 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------------< com.example:PTITCinema >-----------------------
+[INFO] Building PTITCinema 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.5.0:clean (default-clean) @ PTITCinema ---
+[INFO] Deleting D:\Ptit\ptit-cinema-webapp\backend\target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ PTITCinema ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ PTITCinema ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 54 source files with javac [debug parameters release 17] to target\classes
+[INFO] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/AuthController.java: D:\Ptit\ptit-cinema-webapp\backend\src\main\java\com\example\ptitcinema\controller\AuthController.java uses unchecked or unsafe operations.
+[INFO] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/controller/AuthController.java: Recompile with -Xlint:unchecked for details.
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtAuthenticationFilter.java:[21,13] cannot find symbol
+  symbol:   class JwtUtil
+  location: class com.example.config.JwtAuthenticationFilter
+[INFO] 1 error
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  6.668 s
+[INFO] Finished at: 2025-12-03T00:33:56+07:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.14.1:compile (default-compile) on project PTITCinema: Compilation failure
+[ERROR] /D:/Ptit/ptit-cinema-webapp/backend/src/main/java/com/example/ptitcinema/config/JwtAuthenticationFilter.java:[21,13] cannot find symbol
+[ERROR]   symbol:   class JwtUtil
+[ERROR]   location: class com.example.config.JwtAuthenticationFilter
+[ERROR] 
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

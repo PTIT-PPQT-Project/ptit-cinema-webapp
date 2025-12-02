@@ -1,4 +1,4 @@
-package com.example.config;
+package com.example.ptitcinema.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

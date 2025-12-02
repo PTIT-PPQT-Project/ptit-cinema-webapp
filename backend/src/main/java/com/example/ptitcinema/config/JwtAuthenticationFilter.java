@@ -1,4 +1,4 @@
-package com.example.config;
+package com.example.ptitcinema.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
