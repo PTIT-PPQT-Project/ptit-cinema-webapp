@@ -20,6 +20,7 @@ import {Textarea} from '../components/ui/textarea'
 import {Column, Table} from "@/components/ui/table";
 import {DetailDialog} from "@/components/ui/command";
 import dayjs from "dayjs";
+import {MultiSelect} from "@/components/ui/multiSelect";
 
 const MANAGER_MOVIES_KEY = 'manager_movies'
 const MANAGER_SHOWTIMES_KEY = 'manager_showtimes'
@@ -265,7 +266,17 @@ function ManagerPage() {
       MOVIES.find((m) => m.id === movieId)
     return movie?.title ?? `Movie #${movieId}`
   }
-
+  const GENRES = [
+    { label: "Action", value: "Action" },
+    { label: "Adventure", value: "Adventure" },
+    { label: "Animation", value: "Animation" },
+    { label: "Comedy", value: "Comedy" },
+    { label: "Drama", value: "Drama" },
+    { label: "Horror", value: "Horror" },
+    { label: "Romance", value: "Romance" },
+    { label: "Science Fiction", value: "Science Fiction" },
+    { label: "Sci-Fi", value: "Sci-Fi" },
+  ];
   if (!user || !user.roles?.includes('MANAGER')) {
     return null
   }
@@ -440,10 +451,17 @@ function ManagerPage() {
               {/* Genre */}
               <div className="flex flex-col gap-1">
                 <span className="text-xs font-semibold text-muted-foreground">Genre</span>
-                <Input
-                  value={movie.genre}
-                  onChange={(e) => handleChangeMovie(movie.id, 'genre', e.target.value)}
-                  placeholder="E.g., Action, Comedy"
+                <MultiSelect
+                  options={GENRES}
+                  value={
+                    Array.isArray(movie.genre)
+                      ? movie.genre
+                      : (movie.genre?.split(",").map(g => g.trim()) ?? [])
+                  }
+                  onChange={(vals) =>
+                    handleChangeMovie(movie.id, "genre", vals.join(", "))
+                  }
+                  placeholder="Chọn thể loại phim"
                 />
               </div>
 
@@ -713,7 +731,6 @@ function ManagerPage() {
               <div className="flex items-center justify-between">
                 <h3 className="font-semibold text-base">Room #{room.roomId}</h3>
                 <Button
-                  size="xs"
                   variant="outline"
                   onClick={() => handleAddShowtime(room.roomId)}
                 >
@@ -838,7 +855,6 @@ function ManagerPage() {
                     </div>
                     <Button
                       variant="destructive"
-                      size="xs"
                       className="mt-1"
                       onClick={() => handleDeleteShowtime(st.id)}
                     >
