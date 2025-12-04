@@ -92,7 +92,7 @@ export function MultiSelect({
                   >
                     <Check
                       className={cn(
-                        "mr-2 h-4 w-full",
+                        "mr-2 h-4 w-4",
                         selected ? "opacity-100" : "opacity-0"
                       )}
                     />
