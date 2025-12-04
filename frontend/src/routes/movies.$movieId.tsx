@@ -1,8 +1,10 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { getMovieById, getShowtimesByMovieId } from '../data/movies'
+import { createFileRoute } from '@tanstack/react-router'
+import { useQuery } from '@tanstack/react-query'
+import { movieService } from '../services/movie'
 import { Button } from '../components/ui/button'
-import { Play, Star, Clock, Calendar, MapPin } from 'lucide-react'
+import { Play, Star, Clock, Calendar } from 'lucide-react'
 import { Badge } from '../components/ui/badge'
+import { MovieShowtimes } from '../components/MovieShowtimes'
 
 export const Route = createFileRoute('/movies/$movieId')({
   component: MovieDetails,
@@ -10,8 +12,22 @@ export const Route = createFileRoute('/movies/$movieId')({
 
 function MovieDetails() {
   const { movieId } = Route.useParams()
-  const movie = getMovieById(Number(movieId))
-  const showtimes = getShowtimesByMovieId(Number(movieId))
+
+  const { data: movie, isLoading } = useQuery({
+    queryKey: ['movie', movieId],
+    queryFn: () => movieService.getMovieById(Number(movieId)),
+  })
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading movie details...</p>
+        </div>
+      </div>
+    )
+  }
 
   if (!movie) {
     return (
@@ -27,25 +43,25 @@ function MovieDetails() {
       {/* Hero Section with Backdrop */}
       <section className="relative h-[60vh] md:h-[70vh] flex items-end">
         <div className="absolute inset-0 z-0">
-          <img 
-            src={movie.backdrop || movie.poster} 
+          <img
+            src={movie.backdrop || movie.poster}
             alt={movie.title}
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/10 to-background/20" />
         </div>
-        
+
         <div className="container relative z-10 pb-12 px-4 md:px-8">
           <div className="flex flex-col md:flex-row gap-8 items-end">
             {/* Poster */}
             <div className="w-48 md:w-64 flex-shrink-0 rounded-xl overflow-hidden shadow-2xl">
-              <img 
-                src={movie.poster} 
+              <img
+                src={movie.poster}
                 alt={movie.title}
                 className="w-full h-auto"
               />
             </div>
-            
+
             {/* Movie Info */}
             <div className="flex-1 text-white">
               <h1 className="text-4xl md:text-6xl font-bold mb-4">{movie.title}</h1>
@@ -71,11 +87,12 @@ function MovieDetails() {
                 ))}
               </div>
               {movie.trailerUrl && (
-                <Link to={Route.path} params={{ movieId }} hash="trailer">
-                  <Button size="lg" className="bg-red-600 hover:bg-red-700 text-white gap-2">
+                  <Button size="lg" className="bg-red-600 hover:bg-red-700 text-white gap-2"   onClick={() => {
+                    const el = document.getElementById("trailer");
+                    if (el) el.scrollIntoView({ behavior: "smooth" });
+                  }}>
                   <Play className="w-5 h-5 fill-current" /> Watch Trailer
                 </Button>
-                </Link>
               )}
             </div>
           </div>
@@ -139,56 +156,8 @@ function MovieDetails() {
           {/* Sidebar - Showtimes */}
           <div className="lg:col-span-1">
             <div className="sticky top-20">
-              <h2 className="text-2xl font-bold mb-6">Showtimes</h2>
-              
-              {showtimes.length === 0 ? (
-                <div className="text-center py-12 border rounded-xl">
-                  <p className="text-muted-foreground">No showtimes available</p>
-                </div>
-              ) : (
-                <div className="space-y-6">
-                  {showtimes.map((showtime) => (
-                    <div key={showtime.id} className="border rounded-xl p-6 hover:shadow-lg transition-shadow">
-                      <div className="flex items-start gap-3 mb-4">
-                        <MapPin className="w-5 h-5 text-red-600 mt-1" />
-                        <div>
-                          <h3 className="font-bold text-lg">{showtime.cinema.name}</h3>
-                          <p className="text-sm text-muted-foreground">{showtime.cinema.location}</p>
-                        </div>
-                      </div>
-                      
-                      <div className="mb-4">
-                        <p className="text-sm text-muted-foreground mb-2">Available Times</p>
-                        <div className="grid grid-cols-2 gap-2">
-                          {showtime.times.map((time) => (
-                            <Link 
-                              key={time}
-                              to="/booking/$showtimeId" 
-                              params={{ showtimeId: String(showtime.id) }}
-                            >
-                              <Button 
-                                variant="outline" 
-                                className="w-full hover:bg-red-600 hover:text-white hover:border-red-600"
-                              >
-                                {time}
-                              </Button>
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
-                      
-                      <div className="pt-4 border-t">
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm text-muted-foreground">Price</span>
-                          <span className="text-xl font-bold text-red-600">
-                            {showtime.price.toLocaleString('vi-VN')} ₫
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+              <h2 className="text-2xl font-bold mb-6">Lịch chiếu</h2>
+              <MovieShowtimes movieId={Number(movieId)} />
             </div>
           </div>
         </div>

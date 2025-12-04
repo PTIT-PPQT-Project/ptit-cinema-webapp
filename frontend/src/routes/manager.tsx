@@ -4,8 +4,9 @@ import * as React from 'react'
 import {toast} from 'sonner'
 
 import {userAtom} from '../store/auth'
-import {MOVIES, SHOWTIMES, CINEMAS} from '../data/movies'
-import type {Movie, Showtime} from '../types/movie'
+import { movieService } from '../services/movie'
+import { CINEMAS } from '../data/movies'
+import type { Movie, Showtime } from '../types/movie'
 
 import {
   Card,
@@ -22,40 +23,6 @@ import {DetailDialog} from "@/components/ui/command";
 import dayjs from "dayjs";
 import {MultiSelect} from "@/components/ui/multiSelect";
 
-const MANAGER_MOVIES_KEY = 'manager_movies'
-const MANAGER_SHOWTIMES_KEY = 'manager_showtimes'
-
-function loadManagerMovies(): Movie[] {
-  if (typeof window === 'undefined') return MOVIES
-  const raw = localStorage.getItem(MANAGER_MOVIES_KEY)
-  if (!raw) return MOVIES
-  try {
-    return JSON.parse(raw) as Movie[]
-  } catch {
-    return MOVIES
-  }
-}
-
-function saveManagerMovies(movies: Movie[]) {
-  if (typeof window === 'undefined') return
-  localStorage.setItem(MANAGER_MOVIES_KEY, JSON.stringify(movies))
-}
-
-function loadManagerShowtimes(): Showtime[] {
-  if (typeof window === 'undefined') return SHOWTIMES
-  const raw = localStorage.getItem(MANAGER_SHOWTIMES_KEY)
-  if (!raw) return SHOWTIMES
-  try {
-    return JSON.parse(raw) as Showtime[]
-  } catch {
-    return SHOWTIMES
-  }
-}
-
-function saveManagerShowtimes(showtimes: Showtime[]) {
-  if (typeof window === 'undefined') return
-  localStorage.setItem(MANAGER_SHOWTIMES_KEY, JSON.stringify(showtimes))
-}
 
 export const Route = createFileRoute('/manager')({
   component: ManagerPage,
@@ -66,7 +33,7 @@ function ManagerPage() {
   const navigate = useNavigate()
 
   const [movies, setMovies] = React.useState<Movie[]>([])
-  const [movie, setMovie] = React.useState<Movie>({})
+  const [movie, setMovie] = React.useState<Movie>({} as Movie)
   const [showtimes, setShowtimes] = React.useState<Showtime[]>([])
   const [showDetails, setShowDetail] = React.useState<boolean>(false)
   const [page, setPage] = React.useState<number>(1);
@@ -74,16 +41,21 @@ function ManagerPage() {
   const [searchQuery, setSearchQuery] = React.useState('')
 
   React.useEffect(() => {
-    // if (!user) {
-    //   navigate({ to: '/login', search: { redirect: '/manager' } })
-    //   return
-    // }
-    // if (!user.roles?.includes('MANAGER')) {
-    //   navigate({ to: '/' })
-    //   return
-    // }
-    setMovies(loadManagerMovies())
-    setShowtimes(loadManagerShowtimes())
+    if (!user) {
+      navigate({ to: '/login', search: { redirect: '/manager' } })
+      return
+    }
+    if (!user.roles?.includes('MANAGER')) {
+      navigate({ to: '/' })
+      return
+    }
+    const fetchData = async () => {
+      const m = await movieService.getMovies()
+      setMovies(m)
+      const s = await movieService.getShowtimes()
+      setShowtimes(s)
+    }
+    fetchData()
   }, [user, navigate])
 
   // ----- Movies helpers -----
@@ -96,29 +68,21 @@ function ManagerPage() {
 
   const handleAddMovie = () => {
     const prevMovie =  {
-        id: Date.now(),
+        id: 0,
         title: 'New Movie',
         genre: '',
         rating: 0,
         poster: '',
         duration: '',
         synopsis: '',
-      }
-    // updateMovies((prev) => [
-    //   ...prev,
-    //   {
-    //     id: Date.now(),
-    //     title: 'New Movie',
-    //     genre: '',
-    //     rating: 0,
-    //     poster: '',
-    //     duration: '',
-    //     synopsis: '',
-    //   },
-    // ])
+        releaseDate: new Date().toISOString().split('T')[0],
+        backdrop: '',
+        director: '',
+        cast: [],
+        trailerUrl: ''
+      } as Movie
       setMovie(prevMovie)
       setShowDetail(true)
-
   }
 
   const handleChangeMovie = (id: number, field: keyof Movie, value: any) => {
@@ -126,40 +90,40 @@ function ManagerPage() {
       prev.id === id ? {...prev, [field]: value} : prev)
   }
 
-  const handleDeleteMovie = (id: number) => {
-    updateMovies((prev) => prev.filter((m) => m.id !== id))
+  const handleDeleteMovie = async (id: number) => {
+    await movieService.deleteMovie(id)
+    const m = await movieService.getMovies()
+    setMovies(m)
+    toast.success('Movie deleted')
   }
 
-  const handleSaveMovies = () => {
-    saveManagerMovies(movies)
-    toast.success('Movies have been saved')
-  }
-  const handleSaveMovie = () => {
+  const handleSaveMovie = async () => {
     if (!movie) return;
-    const isCreated = movies.some(m => m.id === movie.id);
-    let updatedList : Array<any>
-
-    if (!isCreated){
-      updatedList = [...movies, movie];
-    } else {
-      updatedList = movies.map(m =>
-        m.id === movie.id ? movie : m
-      );
+    try {
+        if (movie.id === 0 || !movies.find(m => m.id === movie.id)) {
+             // Create
+             // Remove id 0 to let backend/mock assign
+             const { id, ...rest } = movie
+             await movieService.createMovie(rest as Movie)
+        } else {
+             await movieService.updateMovie(movie.id, movie)
+        }
+        const m = await movieService.getMovies()
+        setMovies(m)
+        toast.success('Movie saved')
+        setShowDetail(false)
+    } catch (e) {
+        toast.error('Failed to save movie')
     }
-    console.log(updatedList)
-    setMovies(updatedList);
-    saveManagerMovies(updatedList);
-    toast.success('Movies have been saved');
-    setShowDetail(false)
   };
   // ----- Showtimes helpers -----
   const updateShowtimes = (updater: (prev: Showtime[]) => Showtime[]) => {
     setShowtimes((prev) => updater(prev))
   }
 
-  const handleAddShowtime = (roomId?: number) => {
+  const handleAddShowtime = async (roomId?: number) => {
     const defaultRoomId = roomId ?? 1
-    const defaultMovie = movies[0] ?? MOVIES[0]
+    const defaultMovie = movies[0]
     const defaultCinema = CINEMAS[0]
 
     if (!defaultMovie || !defaultCinema) {
@@ -169,19 +133,22 @@ function ManagerPage() {
 
     const today = new Date().toISOString().slice(0, 10)
 
-    updateShowtimes((prev) => [
-      ...prev,
-      {
-        id: Date.now(),
-        movieId: defaultMovie.id,
-        cinemaId: defaultCinema.id,
-        cinema: defaultCinema,
-        date: today,
-        times: ['09:00'],
-        price: 100000,
-        roomId: defaultRoomId,
-      },
-    ])
+    try {
+        await movieService.createShowtime({
+            movieId: defaultMovie.id,
+            cinemaId: defaultCinema.id,
+            cinema: defaultCinema,
+            date: today,
+            times: ['09:00'],
+            price: 100000,
+            roomId: defaultRoomId,
+        })
+        const s = await movieService.getShowtimes()
+        setShowtimes(s)
+        toast.success('Showtime created')
+    } catch (e) {
+        toast.error('Failed to create showtime')
+    }
   }
 
   const handleChangeShowtime = (
@@ -232,13 +199,22 @@ function ManagerPage() {
     )
   }
 
-  const handleDeleteShowtime = (id: number) => {
-    updateShowtimes((prev) => prev.filter((st) => st.id !== id))
+  const handleDeleteShowtime = async (id: number) => {
+    await movieService.deleteShowtime(id)
+    const s = await movieService.getShowtimes()
+    setShowtimes(s)
+    toast.success('Showtime deleted')
   }
 
-  const handleSaveShowtimes = () => {
-    saveManagerShowtimes(showtimes)
-    toast.success('Showtimes have been saved')
+  const handleSaveShowtimes = async () => {
+    try {
+        await Promise.all(showtimes.map(st => movieService.updateShowtime(st.id, st)))
+        toast.success('Showtimes saved')
+        const s = await movieService.getShowtimes()
+        setShowtimes(s)
+    } catch (e) {
+        toast.error('Failed to save showtimes')
+    }
   }
 
   // Group showtimes by room
@@ -261,9 +237,7 @@ function ManagerPage() {
   )
 
   const getMovieTitle = (movieId: number) => {
-    const movie =
-      movies.find((m) => m.id === movieId) ||
-      MOVIES.find((m) => m.id === movieId)
+    const movie = movies.find((m) => m.id === movieId)
     return movie?.title ?? `Movie #${movieId}`
   }
   const GENRES = [
@@ -287,16 +261,23 @@ function ManagerPage() {
     setShowDetail(true); // mở modal nếu cần
   }
 
-  function handleSearch(searchValue = "") {
+  async function handleSearch(searchValue = "") {
     setSearchQuery(searchValue);
-
     const query = searchValue.toLowerCase();
 
-    const searchResults = MOVIES.filter(movie => {
+    // Re-fetch all to filter (simple approach)
+    const allMovies = await movieService.getMovies();
+
+    if (!query) {
+        setMovies(allMovies);
+        return;
+    }
+
+    const searchResults = allMovies.filter(movie => {
       return (
         movie.title.toLowerCase().includes(query) ||
         movie.genre.toLowerCase().includes(query) ||
-        movie.synopsis?.toLowerCase().includes(query)
+        (movie.synopsis && movie.synopsis.toLowerCase().includes(query))
       );
     });
 
@@ -433,6 +414,15 @@ function ManagerPage() {
                   handleChangeMovie(movie.id, "poster", imageUrl);
                 }}
               />
+            {/* Poster URL Input */}
+             <div className="flex flex-col gap-1">
+                <span className="text-xs font-semibold text-muted-foreground">Poster URL</span>
+                <Input
+                  value={movie.poster || ''}
+                  onChange={(e) => handleChangeMovie(movie.id, 'poster', e.target.value)}
+                  placeholder="https://..."
+                />
+              </div>
             </div>
 
             {/* RIGHT COLUMN — MOVIE FIELDS */}
@@ -553,6 +543,16 @@ function ManagerPage() {
                 >
                   Upload Backdrop
                 </button>
+
+               {/* Backdrop URL Input */}
+              <div className="flex flex-col gap-1 mt-2">
+                <span className="text-xs font-semibold text-muted-foreground">Backdrop URL</span>
+                <Input
+                  value={movie.backdrop || ''}
+                  onChange={(e) => handleChangeMovie(movie.id, 'backdrop', e.target.value)}
+                  placeholder="https://..."
+                />
+              </div>
 
               </div>
             </div>
@@ -716,182 +716,7 @@ function ManagerPage() {
       {/*  </CardContent>*/}
       {/*</Card>*/}
 
-      {/* Showtimes by room (CRUD) */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Showtimes by Room</CardTitle>
-          <CardDescription>
-            View and manage which showtimes each room currently has (based on editable showtime
-            data).
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {roomShowtimes.map((room) => (
-            <div key={room.roomId} className="border rounded-lg p-4 space-y-3">
-              <div className="flex items-center justify-between">
-                <h3 className="font-semibold text-base">Room #{room.roomId}</h3>
-                <Button
-                  variant="outline"
-                  onClick={() => handleAddShowtime(room.roomId)}
-                >
-                  Add showtime for this room
-                </Button>
-              </div>
 
-              {room.items.map((st) => (
-                <div
-                  key={st.id}
-                  className="grid gap-3 md:grid-cols-6 border-t pt-3 mt-3"
-                >
-                  {/* Movie */}
-                  <div className="flex flex-col gap-1 md:col-span-2">
-                    <span className="text-xs font-semibold text-muted-foreground">
-                      Movie
-                    </span>
-                    <select
-                      className="border rounded-md px-2 py-1 text-sm bg-background"
-                      value={st.movieId}
-                      onChange={(e) =>
-                        handleChangeShowtime(
-                          st.id,
-                          'movieId',
-                          Number(e.target.value),
-                        )
-                      }
-                    >
-                      {movies.map((m) => (
-                        <option key={m.id} value={m.id}>
-                          {m.title}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Cinema */}
-                  <div className="flex flex-col gap-1">
-                    <span className="text-xs font-semibold text-muted-foreground">
-                      Cinema
-                    </span>
-                    <select
-                      className="border rounded-md px-2 py-1 text-sm bg-background"
-                      value={st.cinemaId}
-                      onChange={(e) =>
-                        handleChangeShowtime(
-                          st.id,
-                          'cinemaId',
-                          Number(e.target.value),
-                        )
-                      }
-                    >
-                      {CINEMAS.map((c) => (
-                        <option key={c.id} value={c.id}>
-                          {c.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Date */}
-                  <div className="flex flex-col gap-1">
-                    <span className="text-xs font-semibold text-muted-foreground">
-                      Date
-                    </span>
-                    <Input
-                      type="date"
-                      value={st.date}
-                      onChange={(e) =>
-                        handleChangeShowtime(st.id, 'date', e.target.value)
-                      }
-                    />
-                  </div>
-
-                  {/* Times */}
-                  <div className="flex flex-col gap-1 md:col-span-2">
-                    <span className="text-xs font-semibold text-muted-foreground">
-                      Showtimes (comma separated)
-                    </span>
-                    <Input
-                      value={st.times.join(', ')}
-                      onChange={(e) =>
-                        handleChangeShowtime(st.id, 'times', e.target.value)
-                      }
-                      placeholder="10:00, 13:30, 17:00"
-                    />
-                  </div>
-
-                  {/* Price + Room + Delete */}
-                  <div className="flex flex-col gap-2">
-                    <div className="flex flex-col gap-1">
-                      <span className="text-xs font-semibold text-muted-foreground">
-                        Price (VND)
-                      </span>
-                      <Input
-                        type="number"
-                        value={st.price}
-                        onChange={(e) =>
-                          handleChangeShowtime(
-                            st.id,
-                            'price',
-                            Number(e.target.value),
-                          )
-                        }
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <span className="text-xs font-semibold text-muted-foreground">
-                        Room
-                      </span>
-                      <Input
-                        type="number"
-                        value={st.roomId ?? ''}
-                        onChange={(e) =>
-                          handleChangeShowtime(
-                            st.id,
-                            'roomId',
-                            Number(e.target.value),
-                          )
-                        }
-                      />
-                    </div>
-                    <Button
-                      variant="destructive"
-                      className="mt-1"
-                      onClick={() => handleDeleteShowtime(st.id)}
-                    >
-                      Delete
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ))}
-
-          {roomShowtimes.length === 0 && (
-            <p className="text-sm text-muted-foreground">
-              No showtime data yet (SHOWTIMES is empty or has no roomId).
-            </p>
-          )}
-
-          {/* Global add & save for showtimes */}
-          <div className="flex justify-end gap-2 pt-4 border-t mt-2">
-            <Button
-              size="sm"
-              variant="outline"
-              className="bg-gray-100 text-gray-800 hover:bg-gray-200 border-gray-300"
-              onClick={() => handleAddShowtime()}
-            >
-              Add Showtime
-            </Button>
-            <Button
-              size="sm"
-              className="bg-emerald-500 text-white hover:bg-emerald-600"
-              onClick={handleSaveShowtimes}
-            >
-              Save showtimes
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   )
 }

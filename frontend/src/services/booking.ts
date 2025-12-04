@@ -1,45 +1,84 @@
-import { Booking } from '../types/booking'
+import { httpClient } from '../lib/http';
+import { Booking } from '../types/booking';
 
-const BOOKINGS_KEY = 'cinema_bookings'
+const BOOKINGS_KEY = 'cinema_bookings';
 
 export const bookingService = {
-  createBooking(booking: Omit<Booking, 'id' | 'createdAt' | 'qrCode'>): Booking {
-    const id = `BK${Date.now()}${Math.random().toString(36).substr(2, 9).toUpperCase()}`
-    const createdAt = new Date().toISOString()
-    const qrCode = this.generateQRCode(id)
-    
-    const newBooking: Booking = {
-      ...booking,
-      id,
-      createdAt,
-      qrCode,
-      status: 'confirmed'
+  createBooking: async (booking: Omit<Booking, 'id' | 'createdAt' | 'qrCode'>): Promise<Booking> => {
+    try {
+      return await httpClient.post<Booking>('/bookings', booking);
+    } catch (error) {
+      console.warn('API createBooking failed, using mock:', error);
+      
+      const id = `BK${Date.now()}${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+      const createdAt = new Date().toISOString();
+      const qrCode = `PTIT_CINEMA_${id}`; // Simple mock QR
+      
+      const newBooking: Booking = {
+        ...booking,
+        id,
+        createdAt,
+        qrCode,
+        status: 'confirmed'
+      };
+      
+      // Save to localStorage
+      const bookings = bookingService.getLocalBookings();
+      bookings.push(newBooking);
+      localStorage.setItem(BOOKINGS_KEY, JSON.stringify(bookings));
+      
+      return newBooking;
     }
-    
-    // Save to localStorage
-    const bookings = this.getAllBookings()
-    bookings.push(newBooking)
-    localStorage.setItem(BOOKINGS_KEY, JSON.stringify(bookings))
-    
-    return newBooking
   },
   
-  getBookingById(id: string): Booking | undefined {
-    const bookings = this.getAllBookings()
-    return bookings.find(b => b.id === id)
+  getBookingById: async (id: string): Promise<Booking | undefined> => {
+    try {
+      // Since we don't have a specific GET /bookings/:id endpoint yet,
+      // we'll fetch all user bookings and find the one we need.
+      // This works because the user just created the booking, so it should be in their list.
+      const bookings = await bookingService.getUserBookings();
+      return bookings.find(b => b.id === id);
+    } catch (error) {
+      console.error('Error fetching booking by ID:', error);
+      return undefined;
+    }
   },
   
-  getAllBookings(): Booking[] {
-    const data = localStorage.getItem(BOOKINGS_KEY)
-    return data ? JSON.parse(data) : []
+  getUserBookings: async (userId?: number): Promise<Booking[]> => {
+    try {
+      return await httpClient.get<Booking[]>('/bookings/my-bookings');
+    } catch (error) {
+      console.warn('API getUserBookings failed, using mock:', error);
+      if (!userId) return [];
+      return bookingService.getLocalBookings().filter(b => b.userId === userId);
+    }
   },
   
-  getUserBookings(userId: number): Booking[] {
-    return this.getAllBookings().filter(b => b.userId === userId)
+  // Helper for mock data
+  getLocalBookings(): Booking[] {
+    try {
+        const data = localStorage.getItem(BOOKINGS_KEY);
+        return data ? JSON.parse(data) : [];
+    } catch {
+        return [];
+    }
   },
-  
-  generateQRCode(bookingId: string): string {
-    // Simple QR code data - in real app, use a QR library
-    return `PTIT_CINEMA_${bookingId}`
+
+  getBookedSeats: async (showtimeId: number): Promise<string[]> => {
+    try {
+        // In a real app, this would be an API call like:
+        // return await httpClient.get<string[]>(`/bookings/occupied-seats?showtimeId=${showtimeId}`);
+        
+        // Mock implementation using local storage
+        const bookings = bookingService.getLocalBookings();
+        const showtimeBookings = bookings.filter(b => Number(b.showtimeId) === showtimeId && b.status === 'confirmed');
+        
+        // Flatten all seats from all bookings for this showtime
+        const occupiedSeats = showtimeBookings.flatMap(b => b.seats);
+        return occupiedSeats;
+    } catch (error) {
+        console.error('Error fetching booked seats:', error);
+        return [];
+    }
   }
-}
+};
